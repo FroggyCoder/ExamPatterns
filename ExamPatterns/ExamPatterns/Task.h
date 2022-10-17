@@ -10,6 +10,7 @@
 #include <chrono>
 #include <ctime>
 #include <experimental/filesystem>
+#include "Menu.h"
 
 using namespace std;
 namespace fs = std::experimental::filesystem;
@@ -22,16 +23,16 @@ ostream& operator<<(ostream& out, const Priority& prior)
 	switch (prior)
 	{
 	case LOW:
-		out << "Low";
+		out << "низкий";
 		break;
 	case MEDIUM:
-		out << "Medium";
+		out << "средний";
 		break;
 	case HIGH:
-		out << "High";
+		out << "высокий";
 		break;
 	case EXTREME:
-		out << "Extreme";
+		out << "наивысший";
 		break;
 	default:
 		break;
@@ -254,10 +255,10 @@ public:
 
 	void print()const
 	{
-		cout <<     "Task: " << task     << endl;
-		cout << "Deadline: " << deadline << endl;
-		cout << "Priority: " << priority << endl;
-		cout <<      "Tag: " << tag      << endl;
+		cout << "Задача: "    << task     << endl;
+		cout << "дедлайн: "   << deadline << endl;
+		cout << "приоритет: " << priority << endl;
+		cout << "тег: "       << tag      << endl;
 
 		cout << "----------------------------------------" << endl;
 	}
@@ -310,10 +311,11 @@ public:
 	Task& operator=(const Task& tk)
 	{
 		if (&tk == this) return *this;
-		this->task = tk.task;
+
+		this->task     = tk.task;
 		this->priority = tk.priority;
 		this->deadline = tk.deadline;
-		this->tag = tk.tag;
+		this->tag      = tk.tag;
 	}
 };
 
@@ -386,22 +388,40 @@ Time getTime()
 
 	size_t h, m, s, d, mth;
 
-	cout << "Hours: ";
+	cout << "Часы: ";
 	getWithCheck(h, 24);
 
-	cout << "Minutes: ";
+	cout << "Минуты: ";
 	getWithCheck(m, 60);
 
-	cout << "Seconds: ";
+	cout << "Секунды: ";
 	getWithCheck(s, 60);
 
-	cout << "Day: ";
+	cout << "День: ";
 	getWithCheck(d, 32);
 
-	cout << "Month(number): ";
+	cout << "Месяц(номер): ";
 	getWithCheck(mth, 13);
 
 	cin.ignore();
 
 	return Time(h, m, s, d, Month(mth));
+}
+
+bool getNoOrYes(const string& warning)
+{
+	system("cls");
+	gotoxy(20, 10);
+	cout << warning << endl;
+	return Menu::select_vertical({ "Нет","Да" }, HorizontalAlignment::Center, 12);
+}
+
+Priority getPriority()
+{
+	system("cls");
+	gotoxy(20, 10);
+
+	cout << "Выберите приоритет задачи: ";
+
+	return (Priority(Menu::select_vertical({ "низкий","средний","высокий","наивысший" }, HorizontalAlignment::Center, 11)));
 }
