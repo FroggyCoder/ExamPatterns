@@ -1,10 +1,7 @@
-﻿  Functions.cpp
-  main.cpp
-C:\GitHubRepositories\ExamPatterns\ExamPatterns\ExamPatterns\ToDoManager.h(3,21): error C3083: experimental: символ слева от "::" должен представлять тип
-C:\GitHubRepositories\ExamPatterns\ExamPatterns\ExamPatterns\ToDoManager.h(3,35): error C2039: "filesystem": не является членом "std".
-C:\GitHubRepositories\ExamPatterns\ExamPatterns\ExamPatterns\predefined C++ types (compiler internal)(342): message : см. объявление "std"
-C:\GitHubRepositories\ExamPatterns\ExamPatterns\ExamPatterns\ToDoManager.h(3,45): error C2878: filesystem: пространство имен или класс с таким именем не существует
+﻿  main.cpp
 C:\GitHubRepositories\ExamPatterns\ExamPatterns\ExamPatterns\Menu.h(32,1): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
 C:\GitHubRepositories\ExamPatterns\ExamPatterns\ExamPatterns\Menu.h(111,29): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
 C:\GitHubRepositories\ExamPatterns\ExamPatterns\ExamPatterns\Task.h(348,2): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
-  Создание кода...
+C:\GitHubRepositories\ExamPatterns\ExamPatterns\ExamPatterns\Task.h(198): warning C4715: Time::operator=: значение возвращается не при всех путях выполнения
+C:\GitHubRepositories\ExamPatterns\ExamPatterns\ExamPatterns\Task.h(291): warning C4715: Task::operator=: значение возвращается не при всех путях выполнения
+  ExamPatterns.vcxproj -> C:\GitHubRepositories\ExamPatterns\ExamPatterns\x64\Debug\ExamPatterns.exe

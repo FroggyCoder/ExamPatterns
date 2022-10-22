@@ -1,7 +1,7 @@
 #pragma once
 
-namespace fs = std::experimental::filesystem;
 #include "TaskListManager.h"
+namespace fs = std::experimental::filesystem;
 
 int chooseList(list<std::shared_ptr<TaskList>> List)
 {
