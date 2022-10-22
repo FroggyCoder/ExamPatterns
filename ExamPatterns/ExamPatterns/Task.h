@@ -1,12 +1,10 @@
 #pragma once
-
 #define _CRT_SECURE_NO_WARNINGS
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
-
 #include <iostream>
 #include <string>
-#include <list>
 #include <fstream>
+#include <list>
 #include <chrono>
 #include <ctime>
 #include <experimental/filesystem>
@@ -18,9 +16,9 @@ namespace fs = std::experimental::filesystem;
 enum Priority { LOW, MEDIUM, HIGH, EXTREME };
 enum Month { JAN = 1, FAB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
 
-ostream& operator<<(ostream& out, const Priority& prior)
+ostream& operator<<(ostream& out, const Priority& prio)
 {
-	switch (prior)
+	switch (prio)
 	{
 	case LOW:
 		out << "низкий";
@@ -32,17 +30,16 @@ ostream& operator<<(ostream& out, const Priority& prior)
 		out << "высокий";
 		break;
 	case EXTREME:
-		out << "наивысший";
+		out << "сверхвысокий";
 		break;
 	default:
 		break;
 	}
 	return out;
 }
-
-ostream& operator<<(ostream& out, const Month& mth)
+ostream& operator<<(ostream& out, const Month& mnt)
 {
-	switch (mth)
+	switch (mnt)
 	{
 	case JAN:
 		out << "Jan";
@@ -85,16 +82,14 @@ ostream& operator<<(ostream& out, const Month& mth)
 	}
 	return out;
 }
-
-ofstream& operator<<(ofstream& out, const Priority& prior)
+ofstream& operator<<(ofstream& out, const Priority& prio)
 {
-	out << static_cast<int>(prior);
+	out << static_cast<int>(prio);
 	return out;
 }
-
-ofstream& operator<<(ofstream& out, const Month& mth)
+ofstream& operator<<(ofstream& out, const Month& mnt)
 {
-	switch (mth)
+	switch (mnt)
 	{
 	case JAN:
 		out << "Jan";
@@ -140,7 +135,7 @@ ofstream& operator<<(ofstream& out, const Month& mth)
 
 Month stoM(const string& str)
 {
-	if		(str == "Sep") return SEP;
+	if (str == "Sep") return SEP;
 	else if (str == "Jan") return JAN;
 	else if (str == "Fab") return FAB;
 	else if (str == "Mar") return MAR;
@@ -151,145 +146,125 @@ Month stoM(const string& str)
 	else if (str == "Aug") return AUG;
 	else if (str == "Oct") return OCT;
 	else if (str == "Nov") return NOV;
-	else				   return DEC;
+	else return DEC;
 }
 
 class Time
 {
 public:
-	Month  month;
+	size_t hours;
+	size_t minutes;
+	size_t seconds;
 	size_t day;
-	size_t hour;
-	size_t minute;
-	size_t second;
-	
-	Time(size_t h = 0, size_t m = 0, size_t s = 0, size_t d = 1, Month mth = JAN) : hour{ h }, minute{ m }, second{ s }, day{ d }, month{ mth } {}
-
-	bool operator< (const Time& t)
+	Month month;
+	Time(size_t h = 0, size_t m = 0, size_t s = 0, size_t d = 1, Month mon = JAN) : hours{ h }, minutes{ m }, seconds{ s }, day{ d }, month{ mon } {}
+	bool operator< (const Time& _Other)
 	{
-		if (this->month < t.month || this->day < t.day || this->hour < t.hour || this->minute < t.minute || this->second < t.second)
+		if (this->month < _Other.month || this->day < _Other.day || this->hours < _Other.hours || this->minutes < _Other.minutes || this->seconds < _Other.seconds)
 		{
 			return true;
 		}
 		return false;
 	}
-
 	friend ostream& operator<<(ostream& out, const Time& t);
-
-	Time(const Time& t)
+	Time(const Time& _Other)
 	{
-		this->hour   = t.hour;
-		this->minute = t.minute;
-		this->second = t.second;
-		this->day    = t.day;
-		this->month  = t.month;
+		this->hours = _Other.hours;
+		this->minutes = _Other.minutes;
+		this->seconds = _Other.seconds;
+		this->day = _Other.day;
+		this->month = _Other.month;
 	}
-
 	void setCurrent()
 	{
 		auto a = std::chrono::system_clock::now();
-
 		time_t temp = std::chrono::system_clock::to_time_t(a);
 		string time = ctime(&temp);
-
-		month  = stoM(time.substr(4, 3));
-		day    = stoi(time.substr(8, 2));
-		hour   = stoi(time.substr(11, 2));
-		minute = stoi(time.substr(14, 2));
-		second = stoi(time.substr(17, 2));
+		month = stoM(time.substr(4, 3));
+		day = stoi(time.substr(8, 2));
+		hours = stoi(time.substr(11, 2));
+		minutes = stoi(time.substr(14, 2));
+		seconds = stoi(time.substr(17, 2));
 	}
-
-	Time& operator=(const Time& t)
+	Time& operator=(const Time& _Other)
 	{
-		if (&t == this) return *this;
+		if (&_Other == this) return *this;
 
-		this->hour   = t.hour;
-		this->minute = t.minute;
-		this->second = t.second;
-		this->day    = t.day;
-		this->month  = t.month;
+		this->hours = _Other.hours;
+		this->minutes = _Other.minutes;
+		this->seconds = _Other.seconds;
+		this->day = _Other.day;
+		this->month = _Other.month;
 	}
 };
 
 ostream& operator<<(ostream& out, const Time& t)
 {
-	out << t.hour << ":";
-
-	if (t.minute < 10)
+	out << t.hours << ":";
+	if (t.minutes < 10)
 	{
 		out << "0";
 	}
-
-	out << t.minute << ":";
-
-	if (t.second < 10)
+	out << t.minutes << ":";
+	if (t.seconds < 10)
 	{
 		out << "0";
 	}
-
-	out << t.second;
+	out << t.seconds;
 	out << " " << t.day << " " << t.month;
-
 	return out;
 }
 
 class Task
 {
-	string   task;
+	string task;
 	Priority priority;
-	Time     deadline;
-	string   tag;
-
+	Time deadline;
+	string tag;
 public:
 	Task() {}
-
-	string getTask()	   { return task; }		const
-	Priority getPriority() { return priority; } const
-	Time getDeadline()	   { return deadline; } const
-	string getTag()		   { return tag; }		const
-
-	void setTask	 (const string& _Other)	  { task = _Other; }
-	void setPriority (const Priority& _Other) { priority = _Other; }
-	void setDeadline (const Time& _Other)	  { deadline = _Other; }
-	void setTag		 (const string& _Other)	  { tag = _Other; }
-
+	string getTask() { return task; } const
+		void setTask(const string& _Other) { task = _Other; }
+	Priority getPriority() { return priority; }const
+		void setPriority(const Priority& _Other) { priority = _Other; }
+	Time getDeadline() { return deadline; }const
+		void setDeadline(const Time& _Other) { deadline = _Other; }
+	string getTag() { return tag; }const
+		void setTag(const string& _Other) { tag = _Other; }
 	void print()const
 	{
-		cout << "Задача: "    << task     << endl;
-		cout << "дедлайн: "   << deadline << endl;
+		cout << "задача: " << task << endl;
+		cout << "дедлайн: " << deadline << endl;
 		cout << "приоритет: " << priority << endl;
-		cout << "тег: "       << tag      << endl;
-
-		cout << "----------------------------------------" << endl;
+		cout << "тег: " << tag << endl;
+		cout << "-------------------------------------" << endl;
 	}
-
-	bool withinDay(const Time& t) const
+	bool withinDay(const Time& _Other)const
 	{
 		Time temp = deadline;
 		temp.day += 1;
-		return temp < t;
+		return temp < _Other;
 	}
-
 	void load(string newTask, string newDeadline, string newPriority, string newTag)
 	{
 		task = newTask;
 		priority = Priority(stoi(newPriority));
 		tag = newTag;
-
 		Time temp;
 		string buff;
 
 		buff.assign(newDeadline.begin(), newDeadline.begin() + newDeadline.find_first_of(':'));
 		newDeadline.erase(newDeadline.begin(), newDeadline.begin() + newDeadline.find_first_of(':') + 1);
-		temp.hour = stoi(buff);
+		temp.hours = stoi(buff);
 
 		buff.assign(newDeadline.begin(), newDeadline.begin() + newDeadline.find_first_of(':'));
 		newDeadline.erase(newDeadline.begin(), newDeadline.begin() + newDeadline.find_first_of(':') + 1);
-		temp.minute = stoi(buff);
+		temp.minutes = stoi(buff);
 
 		buff.assign(newDeadline.begin(), newDeadline.begin() + newDeadline.find_first_of(' '));
 		newDeadline.erase(newDeadline.begin(), newDeadline.begin() + newDeadline.find_first_of(' ') + 1);
-		temp.second = stoi(buff);
+		temp.seconds = stoi(buff);
+
 
 		buff.assign(newDeadline.begin(), newDeadline.begin() + newDeadline.find_first_of(' '));
 		newDeadline.erase(newDeadline.begin(), newDeadline.begin() + newDeadline.find_first_of(' ') + 1);
@@ -299,69 +274,56 @@ public:
 
 		deadline = temp;
 	}
-
-	Task(const Task& tk)
+	Task(const Task& _Other)
 	{
-		this->task     = tk.task;
-		this->priority = tk.priority;
-		this->deadline = tk.deadline;
-		this->tag      = tk.tag;
+		this->task = _Other.task;
+		this->priority = _Other.priority;
+		this->deadline = _Other.deadline;
+		this->tag = _Other.tag;
 	}
-
-	Task& operator=(const Task& tk)
+	Task& operator=(const Task& _Other)
 	{
-		if (&tk == this) return *this;
-
-		this->task     = tk.task;
-		this->priority = tk.priority;
-		this->deadline = tk.deadline;
-		this->tag      = tk.tag;
+		if (&_Other == this) return *this;
+		this->task = _Other.task;
+		this->priority = _Other.priority;
+		this->deadline = _Other.deadline;
+		this->tag = _Other.tag;
 	}
 };
 
 class TaskList
 {
-
 public:
 	string name;
 	list<Task> tasks;
-
 	TaskList(string n) : name{ n } {}
-
 	void save()
 	{
 		ofstream out("To-Do\\" + name + ".txt");
-
 		for_each(tasks.begin(), tasks.end(), [&out](Task& task)
-		{
-			out << task.getTask()	  << endl;
-			out << task.getDeadline() << endl;
-			out << task.getPriority() << endl;
-			out << task.getTag()	  << endl;
-		});
-
+			{
+				out << task.getTask() << endl;
+				out << task.getDeadline() << endl;
+				out << task.getPriority() << endl;
+				out << task.getTag() << endl;
+			});
 		out.close();
 	}
-
 	void sort()
 	{
 		if (tasks.size() == 0)
 		{
 			return;
 		}
-
 		int i, j;
-
 		for (i = 0; i < tasks.size() - 1; i++)
 		{
 			auto a = tasks.begin();
 			advance(a, i);
-
 			for (j = 0; j < tasks.size() - i - 1; j++)
 			{
 				auto b = tasks.begin();
 				advance(b, j + 1);
-
 				if (a->getPriority() < b->getPriority())
 				{
 					auto temp = *a;
@@ -376,7 +338,6 @@ public:
 Time getTime()
 {
 	system("cls");
-
 	auto getWithCheck = [](size_t& param, size_t higher)->void
 	{
 		int buff;
@@ -385,27 +346,19 @@ Time getTime()
 		else if (buff >= higher) buff = higher - 1;
 		param = buff;
 	};
-
-	size_t h, m, s, d, mth;
-
-	cout << "Часы: ";
+	size_t h, m, s, d, mon;
+	cout << "часы: ";
 	getWithCheck(h, 24);
-
-	cout << "Минуты: ";
+	cout << "минуты: ";
 	getWithCheck(m, 60);
-
-	cout << "Секунды: ";
+	cout << "секунды: ";
 	getWithCheck(s, 60);
-
-	cout << "День: ";
+	cout << "день: ";
 	getWithCheck(d, 32);
-
-	cout << "Месяц(номер): ";
-	getWithCheck(mth, 13);
-
+	cout << "месяц(номер): ";
+	getWithCheck(mon, 13);
 	cin.ignore();
-
-	return Time(h, m, s, d, Month(mth));
+	return Time(h, m, s, d, Month(mon));
 }
 
 bool getNoOrYes(const string& warning)
@@ -413,15 +366,13 @@ bool getNoOrYes(const string& warning)
 	system("cls");
 	gotoxy(20, 10);
 	cout << warning << endl;
-	return Menu::select_vertical({ "Нет","Да" }, HorizontalAlignment::Center, 12);
+	return Menu::select_vertical({ "нет","да" }, HorizontalAlignment::Center, 12);
 }
 
 Priority getPriority()
 {
 	system("cls");
 	gotoxy(20, 10);
-
-	cout << "Выберите приоритет задачи: ";
-
-	return (Priority(Menu::select_vertical({ "низкий","средний","высокий","наивысший" }, HorizontalAlignment::Center, 11)));
+	cout << "выберите приоритет: ";
+	return (Priority(Menu::select_vertical({ "низкий","средний","высокий","сверхвысокий" }, HorizontalAlignment::Center, 11)));
 }
