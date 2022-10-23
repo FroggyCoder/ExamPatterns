@@ -26,19 +26,19 @@
     <ClInclude Include="Functions.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Task.h">
+    <ClInclude Include="Main.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Menu.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="SearchCommand.h">
+    <ClInclude Include="Search.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="TaskListManager.h">
+    <ClInclude Include="TaskList.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="ToDoManager.h">
+    <ClInclude Include="Actions.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,6 +6,7 @@
 #include <vector>
 #include<iomanip>
 #include <conio.h>
+
 #include "Functions.h"
 
 using namespace std;
@@ -37,8 +38,8 @@ public:
 		switch (horizAl)
 		{
 		case Center: x = 40 - maxLen / 2; break;
-		case Left:   x = 0;	              break;
-		case Right:  x = 80 - maxLen;     break;
+		case Left:   x = 40;	          break;
+		case Right:  x = 40 - maxLen;     break;
 		}
 
 		char c;
